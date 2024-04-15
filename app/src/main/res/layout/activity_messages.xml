@@ -65,6 +65,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="32dp"
                             android:text="Learn how to send messages"
+                            android:visibility="invisible"
                             android:textColor="@android:color/white"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

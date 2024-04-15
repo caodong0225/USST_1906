@@ -100,7 +100,7 @@ internal class WebSocketService : Service() {
 
     private fun startPushService() {
         UncaughtExceptionHandler.registerCurrentThread()
-        showForegroundNotification(getString(R.string.websocket_init))
+        /* showForegroundNotification(getString(R.string.websocket_init)) */
 
         if (lastReceivedMessage.get() == NOT_LOADED) {
             missingMessageUtil.lastReceivedMessage { lastReceivedMessage.set(it) }
@@ -117,8 +117,8 @@ internal class WebSocketService : Service() {
         )
             .onOpen { onOpen() }
             .onClose { onClose() }
-            .onBadRequest { message -> onBadRequest(message) }
-            .onNetworkFailure { minutes -> onNetworkFailure(minutes) }
+            /* .onBadRequest { message -> onBadRequest(message) }*/
+            /* .onNetworkFailure { minutes -> onNetworkFailure(minutes) } */
             .onMessage { message -> onMessage(message) }
             .onReconnected { notifyMissedNotifications() }
             .start()
@@ -151,10 +151,12 @@ internal class WebSocketService : Service() {
     }
 
     private fun onClose() {
+        /*
         showForegroundNotification(
             getString(R.string.websocket_closed),
             getString(R.string.websocket_reconnect)
         )
+         */
         ClientFactory.userApiWithToken(settings)
             .currentUser()
             .enqueue(
@@ -200,7 +202,7 @@ internal class WebSocketService : Service() {
     }
 
     private fun onOpen() {
-        showForegroundNotification(getString(R.string.websocket_listening))
+        /* showForegroundNotification(getString(R.string.websocket_listening)) */
     }
 
     private fun notifyMissedNotifications() {
