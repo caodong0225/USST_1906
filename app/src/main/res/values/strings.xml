@@ -54,7 +54,7 @@
     <string name="logout_confirm">你真的要退出吗？</string>
     <string name="yes">是</string>
     <string name="no">否</string>
-    <string name="ack">确定吗？退出就没法接收签到消息了</string>
+    <string name="ack">是否删除所有消息？</string>
     <string name="missed_messages">错过的消息</string>
     <string name="grouped_notification_text">新消息</string>
     <string name="websocket_listening">已连接</string>
@@ -76,9 +76,9 @@
     <string name="setting_message_layout">Message layout</string>
     <string name="setting_key_message_layout">message_layout</string>
     <string name="setting_restart_dialog_title">重启应用?</string>
-    <string name="setting_restart_dialog_message">The change will be effective on next app start.\n\nDo you want to restart now?</string>
-    <string name="setting_restart_dialog_button1">Restart</string>
-    <string name="setting_restart_dialog_button2">Later</string>
+    <string name="setting_restart_dialog_message">APP重启后生效，你希望现在重启吗？</string>
+    <string name="setting_restart_dialog_button1">现在重启</string>
+    <string name="setting_restart_dialog_button2">以后</string>
     <string name="setting_time_format">Time format</string>
     <string name="setting_key_time_format">time_format</string>
     <string name="setting_notifications">Notifications</string>
@@ -104,9 +104,8 @@
     <string name="action_dialog_message">将要跳转至第三方URL，请注意安全</string>
     <string name="action_dialog_button_open">确认</string>
     <string name="action_dialog_button_cancel">取消</string>
-
-    <string name="websocket_not_connected">Not connected</string>
-    <string name="websocket_reconnect">Trying to reconnect</string>
+    <string name="websocket_not_connected">未连接</string>
+    <string name="websocket_reconnect">尝试重连</string>
     <plurals name="websocket_retry_interval">
         <item quantity="one">in %d minute</item>
         <item quantity="other">in %d minutes</item>
