@@ -31,9 +31,9 @@ import com.github.gotify.log.LogsActivity
 import com.github.gotify.log.UncaughtExceptionHandler
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
-import java.security.cert.X509Certificate
 import okhttp3.HttpUrl
 import org.tinylog.kotlin.Logger
+import java.security.cert.X509Certificate
 
 internal class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -90,12 +90,14 @@ internal class LoginActivity : AppCompatActivity() {
         binding.openLogs.setOnClickListener { openLogs() }
         binding.advancedSettings.setOnClickListener { toggleShowAdvanced() }
         binding.login.setOnClickListener { doLogin() }
+        binding.registerPage.setOnClickListener { doRegister() }
     }
 
     private fun invalidateUrl() {
         binding.username.visibility = View.GONE
         binding.password.visibility = View.GONE
         binding.login.visibility = View.GONE
+        binding.registerPage.visibility = View.GONE
         binding.checkurl.text = getString(R.string.check_url)
     }
 
@@ -193,6 +195,7 @@ internal class LoginActivity : AppCompatActivity() {
             binding.username.requestFocus()
             binding.password.visibility = View.VISIBLE
             binding.login.visibility = View.VISIBLE
+            binding.registerPage.visibility = View.VISIBLE
         }
     }
 
@@ -221,6 +224,10 @@ internal class LoginActivity : AppCompatActivity() {
                     onError = { onInvalidLogin() }
                 )
             )
+    }
+
+    private fun doRegister() {
+        startActivity(Intent(this,RegisterActivity::class.java))
     }
 
     private fun onInvalidLogin() {

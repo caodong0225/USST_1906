@@ -113,11 +113,11 @@
                 android:id="@+id/username_editext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:inputType="textPersonName"
-                android:importantForAutofill="yes"
                 android:autofillHints="username"
-                android:hint="@string/username" />
+                android:hint="@string/username"
+                android:importantForAutofill="yes"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,8 +155,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:textColor="@android:color/white"
             android:text="@string/login"
+            android:textColor="@android:color/white"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -178,6 +178,17 @@
             app:layout_constraintTop_toBottomOf="@+id/gotify_url"
             app:layout_constraintWidth_max="280dp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/register_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/register_page"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <ImageButton
             android:id="@+id/advanced_settings"
             style="@style/Widget.Material3.Button.TextButton"
@@ -189,5 +200,6 @@
             app:layout_constraintEnd_toEndOf="@+id/gotify_url"
             app:layout_constraintTop_toTopOf="@+id/checkurl"
             app:srcCompat="@drawable/ic_settings" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

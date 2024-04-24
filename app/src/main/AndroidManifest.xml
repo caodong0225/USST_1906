@@ -47,6 +47,12 @@
             android:theme="@style/AppTheme.NoActionBar.Login"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".login.RegisterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar.Login"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".log.LogsActivity"
             android:exported="false"
             android:label="@string/title_activity_logs"

@@ -2,7 +2,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="found_gotify_version">Found Gotify v%s</string>
+    <string name="found_gotify_version">检测服务器地址</string>
     <string name="version_failed_status_code">Request to \'%1$s\' failed with status code %2$d</string>
     <string name="version_failed">Request to \'%1$s\' failed. %2$s.</string>
     <string name="wronguserpw">不存在此用户名和密码的用户</string>
@@ -13,6 +13,7 @@
     <string name="create_client_failed">创建失败</string>
     <string name="created_client">创建成功</string>
     <string name="title_activity_logs">日志</string>
+    <string name="title_activity_register">注册</string>
     <string name="retry">重试</string>
     <string name="logout">登出</string>
     <string name="oops">出错了</string>
@@ -62,6 +63,7 @@
     <string name="websocket_init">正在初始化</string>
     <string name="versions">gotify/android v%1$s; gotify/server v%2$s</string>
     <string name="advanced_settings">高级设置</string>
+    <string name="register_page">注册</string>
     <string name="done">完成</string>
     <string name="no_certificate_selected">未选择任何证书</string>
     <string name="remove_ca_certificate">移除CA证书</string>
