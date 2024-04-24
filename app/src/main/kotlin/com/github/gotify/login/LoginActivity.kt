@@ -190,7 +190,7 @@ internal class LoginActivity : AppCompatActivity() {
             settings.url = url
             binding.checkurlProgress.visibility = View.GONE
             binding.checkurl.visibility = View.VISIBLE
-            binding.checkurl.text = getString(R.string.found_gotify_version, version.version)
+            binding.checkurl.text = getString(R.string.found_gotify_version)
             binding.username.visibility = View.VISIBLE
             binding.username.requestFocus()
             binding.password.visibility = View.VISIBLE

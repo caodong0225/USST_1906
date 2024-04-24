@@ -4,7 +4,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="found_gotify_version">检测服务器地址</string>
     <string name="version_failed_status_code">Request to \'%1$s\' failed with status code %2$d</string>
-    <string name="version_failed">Request to \'%1$s\' failed. %2$s.</string>
+    <string name="version_failed">请求 \'%1$s\' 失败. %2$s.</string>
     <string name="wronguserpw">不存在此用户名和密码的用户</string>
     <string name="create_client_title">用户ID</string>
     <string name="create_client_message">为你本次登录创建一个ID吧</string>
@@ -101,7 +101,7 @@
     <string name="push_priority_hint">Priority</string>
     <string name="push_missing_app_info">There are no applications available on the server to push a message to.</string>
     <string name="message_copied_to_clipboard">消息已复制</string>
-    <string name="not_loggedin_share">Cannot share to Gotify, because you aren\'t logged in.</string>
+    <string name="not_loggedin_share">无法连接到服务器，因为你还未登录.</string>
     <string name="action_dialog_missing">Missing URL</string>
     <string name="action_dialog_message">将要跳转至第三方URL，请注意安全</string>
     <string name="action_dialog_button_open">确认</string>
@@ -118,4 +118,9 @@
     <string name="notification_channel_title_low">Low priority messages (1–3)</string>
     <string name="notification_channel_title_normal">Normal priority messages (4–7)</string>
     <string name="notification_channel_title_high">High priority messages (>7)</string>
+    <string name="register_username">用户名</string>
+    <string name="register_password">密码</string>
+    <string name="server_address">服务器注册端口</string>
+    <string name="x_session_id">X-Session-ID</string>
+    <string name="register_login">登录</string>
 </resources>
