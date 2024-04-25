@@ -40,4 +40,11 @@ public class Register {
     public void setX_session_id(String x_session_id) {
         this.x_session_id = x_session_id;
     }
+
+    // 构造函数
+    public Register(String username, String password, String xSessionId) {
+        this.username = username;
+        this.password = password;
+        this.x_session_id = xSessionId;
+    }
 }

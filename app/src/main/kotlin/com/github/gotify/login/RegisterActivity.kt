@@ -10,9 +10,11 @@ import com.github.gotify.Settings
 import com.github.gotify.Utils
 import com.github.gotify.api.Api
 import com.github.gotify.api.ApiException
+import com.github.gotify.api.Callback
 import com.github.gotify.api.ClientFactory
 import com.github.gotify.client.api.RegisterApi
 import com.github.gotify.client.model.Register
+import com.github.gotify.client.model.RegisterResponse
 import com.github.gotify.databinding.ActivityRegisterBinding
 import okhttp3.HttpUrl
 import org.tinylog.kotlin.Logger
@@ -30,15 +32,6 @@ internal class RegisterActivity : AppCompatActivity()  {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowCustomEnabled(true)
-        }
-        if (!settings.tokenExists()) {
-            Toast.makeText(
-                applicationContext,
-                R.string.not_loggedin_share,
-                Toast.LENGTH_SHORT
-            ).show()
-            finish()
-            return
         }
     }
 
@@ -59,6 +52,18 @@ internal class RegisterActivity : AppCompatActivity()  {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    private fun onCreateUser(registerInfo: RegisterResponse) {
+        if (registerInfo.code != "200")
+        {
+            Utils.showSnackBar(this, registerInfo.message)
+        }
+        else
+        {
+            Utils.showSnackBar(this, registerInfo.message)
+            finish()
+        }
+    }
+
     private fun doRegisterAccount() {
         // 注册账号
         val url = settings.url
@@ -85,23 +90,28 @@ internal class RegisterActivity : AppCompatActivity()  {
             return
         }
 
-        val client = ClientFactory.clientToken(
-            modifiedHttpUrl,
-            settings.sslSettings(),
-            settings.token
-        )
+        val username = binding.registerUsername.text.toString()
+        val password = binding.registerPassword.text.toString()
+        val x_session_id = binding.xSessionId.text.toString()
+        val registerForm = Register(username, password, x_session_id)
+
         try{
-            val registerApi = client.createService(RegisterApi::class.java)
-            val username = binding.registerUsername.text.toString()
-            val password = binding.registerPassword.text.toString()
-            val x_session_id = binding.xSessionId.text.toString()
-            val registerForm = Register()
-            registerForm.username = username
-            registerForm.password = password
-            registerForm.x_session_id = x_session_id
-            Api.execute(registerApi.createRegister(registerForm))
+            ClientFactory.registerUser(
+                //modifiedHttpUrl,
+                "http://192.168.31.62:8080",
+                settings.sslSettings()
+            ).createRegister(registerForm)
+                .enqueue(
+                    Callback.callInUI(
+                        this,
+                        onSuccess = Callback.SuccessBody { registerInfo -> onCreateUser(registerInfo) },
+                        onError = { exception ->
+                            Logger.error(exception, "注册失败")
+                            Utils.showSnackBar(this, "注册失败")}
+                    )
+                )
         } catch (apiException: ApiException) {
-            Logger.error(apiException, "注册失败")
+            Utils.showSnackBar(this, "注册失败")
         }
     }
 

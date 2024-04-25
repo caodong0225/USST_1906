@@ -3,6 +3,7 @@ package com.github.gotify.api
 import com.github.gotify.SSLSettings
 import com.github.gotify.Settings
 import com.github.gotify.client.ApiClient
+import com.github.gotify.client.api.RegisterApi
 import com.github.gotify.client.api.UserApi
 import com.github.gotify.client.api.VersionApi
 import com.github.gotify.client.auth.ApiKeyAuth
@@ -48,6 +49,10 @@ internal object ClientFactory {
     fun userApiWithToken(settings: Settings): UserApi {
         return clientToken(settings.url, settings.sslSettings(), settings.token)
             .createService(UserApi::class.java)
+    }
+
+    fun registerUser(baseUrl: String, sslSettings: SSLSettings): RegisterApi {
+        return unauthorized(baseUrl, sslSettings).createService(RegisterApi::class.java)
     }
 
     private fun defaultClient(
