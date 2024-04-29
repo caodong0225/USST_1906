@@ -31,9 +31,9 @@ import com.github.gotify.log.LogsActivity
 import com.github.gotify.log.UncaughtExceptionHandler
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import java.security.cert.X509Certificate
 import okhttp3.HttpUrl
 import org.tinylog.kotlin.Logger
-import java.security.cert.X509Certificate
 
 internal class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -186,7 +186,7 @@ internal class LoginActivity : AppCompatActivity() {
     }
 
     private fun onValidUrl(url: String): SuccessCallback<VersionInfo> {
-        return Callback.SuccessBody { version ->
+        return Callback.SuccessBody {
             settings.url = url
             binding.checkurlProgress.visibility = View.GONE
             binding.checkurl.visibility = View.VISIBLE
@@ -227,7 +227,7 @@ internal class LoginActivity : AppCompatActivity() {
     }
 
     private fun doRegister() {
-        startActivity(Intent(this,RegisterActivity::class.java))
+        startActivity(Intent(this, RegisterActivity::class.java))
     }
 
     private fun onInvalidLogin() {

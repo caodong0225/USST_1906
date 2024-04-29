@@ -9,13 +9,13 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "The RegisterExternal holds information about a new user.")
 public class Register {
     @SerializedName("username")
-    private String username = null;
+    private String username;
 
     @SerializedName("password")
-    private String password = null;
+    private String password;
 
     @SerializedName("x_session_id")
-    private String x_session_id = null;
+    private String x_session_id;
 
     @ApiModelProperty(example = "lisa", required = true, value = "The user's name.")
     public String getUsername() {
