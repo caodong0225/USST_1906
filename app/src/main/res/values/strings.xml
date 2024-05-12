@@ -12,6 +12,7 @@
     <string name="cancel">取消</string>
     <string name="create_client_failed">创建失败</string>
     <string name="created_client">创建成功</string>
+    <string name="auto_sign">设置失败</string>
     <string name="title_activity_logs">日志</string>
     <string name="title_activity_register">注册</string>
     <string name="retry">重试</string>
@@ -37,6 +38,7 @@
     <string name="message_image_desc">消息的图片</string>
     <string name="delete_message">删除消息</string>
     <string name="gotify_url">请输入服务器地址</string>
+    <string name="gotify_port">请输入服务器端口号</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
     <string name="disabled_validate_ssl">禁用SSL认证</string>
@@ -72,6 +74,7 @@
     <string name="i_understand">我明白</string>
     <string name="no_messages_yet">目前没有收到任何签到通知</string>
     <string name="title_activity_settings">设置</string>
+    <string name="title_activity_auto_sign">自动签到</string>
     <string name="settings_appearance">外观</string>
     <string name="setting_theme">主题</string>
     <string name="setting_key_theme">主题</string>
@@ -123,4 +126,6 @@
     <string name="server_address">服务器注册端口</string>
     <string name="x_session_id">X-Session-ID</string>
     <string name="register_confirm">注册</string>
+    <string name="is_auto_sign">是否自动签到</string>
+    <string name="setting_description">设置ssl证书</string>
 </resources>

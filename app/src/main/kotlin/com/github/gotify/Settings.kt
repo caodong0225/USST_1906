@@ -9,6 +9,12 @@ internal class Settings(context: Context) {
     var url: String
         get() = sharedPreferences.getString("url", "")!!
         set(value) = sharedPreferences.edit().putString("url", value).apply()
+    var signUrl: String
+        get() = sharedPreferences.getString("signUrl", "")!!
+        set(value) = sharedPreferences.edit().putString("signUrl", value).apply()
+    var isAuto: Boolean
+        get() = sharedPreferences.getBoolean("isAuto", false)
+        set(value) = sharedPreferences.edit().putBoolean("isAuto", value).apply()
     var token: String?
         get() = sharedPreferences.getString("token", null)
         set(value) = sharedPreferences.edit().putString("token", value).apply()
@@ -41,6 +47,7 @@ internal class Settings(context: Context) {
 
     fun clear() {
         url = ""
+        signUrl = ""
         token = null
         validateSSL = true
         cert = null

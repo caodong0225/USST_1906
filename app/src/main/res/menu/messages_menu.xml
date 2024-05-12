@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
@@ -32,6 +33,11 @@
             android:icon="@drawable/ic_bug_report"
             android:id="@+id/nav_logs"
             android:title="@string/logs" />
+        <item
+            android:id="@+id/enable_switch"
+            android:icon="@drawable/ic_sign"
+            android:title="@string/is_auto_sign"
+            app:actionLayout="@layout/switch_layout"/>
         <item
             android:icon="@drawable/ic_power_setting"
             android:orderInCategory="2"

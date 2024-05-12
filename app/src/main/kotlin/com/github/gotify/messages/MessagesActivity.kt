@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
@@ -36,13 +37,13 @@ import com.github.gotify.Utils
 import com.github.gotify.Utils.launchCoroutine
 import com.github.gotify.api.Api
 import com.github.gotify.api.ApiException
-import com.github.gotify.api.Callback
 import com.github.gotify.api.ClientFactory
-import com.github.gotify.client.api.ApplicationApi
+import com.github.gotify.client.api.AutoSignApi
 import com.github.gotify.client.api.ClientApi
 import com.github.gotify.client.api.MessageApi
 import com.github.gotify.client.model.Application
 import com.github.gotify.client.model.Client
+import com.github.gotify.client.model.GlobalResponse
 import com.github.gotify.client.model.Message
 import com.github.gotify.databinding.ActivityMessagesBinding
 import com.github.gotify.init.InitializationActivity
@@ -244,6 +245,63 @@ internal class MessagesActivity :
 
         val refreshAll = headerView.findViewById<ImageButton>(R.id.refresh_all)
         refreshAll.setOnClickListener { refreshAll() }
+
+        val changeSwitch = binding.navView.menu.findItem(R.id.enable_switch).actionView
+            ?.findViewById<SwitchCompat>(R.id.change_switch)
+
+        launchCoroutine {
+            checkIsAutoSign()
+            // 切换到主线程执行 UI 操作
+            withContext(Dispatchers.Main) {
+                if (changeSwitch != null) {
+                    changeSwitch.isChecked = settings.isAuto
+                }
+            }
+        }
+    }
+
+    private fun checkIsAutoSign() {
+        val autoSignApi = ClientFactory.clientToken(
+            viewModel.settings.signUrl,
+            viewModel.settings.sslSettings(),
+            viewModel.settings.token
+        )
+            .createService(AutoSignApi::class.java)
+        try {
+            val res: GlobalResponse = Api.execute(autoSignApi.isAutoSign(viewModel.settings.token))
+            if (res.code == "200") {
+                viewModel.settings.isAuto = res.message == "1"
+            } else {
+                Logger.error("Could not get auto sign info")
+            }
+        } catch (e: ApiException) {
+            Logger.error(e, "Could not get auto sign info")
+        }
+    }
+    private fun changeIsAutoSign(isAutoSign: Boolean) {
+        val autoSignApi = ClientFactory.clientToken(
+            viewModel.settings.signUrl,
+            viewModel.settings.sslSettings(),
+            viewModel.settings.token
+        )
+            .createService(AutoSignApi::class.java)
+        val autoSign = if (isAutoSign) {
+            1
+        } else {
+            0
+        }
+        try {
+            val res: GlobalResponse = Api.execute(
+                autoSignApi.setAutoSign(viewModel.settings.token, autoSign)
+            )
+            if (res.code == "200") {
+                viewModel.settings.isAuto = isAutoSign
+            } else {
+                Utils.showSnackBar(this, getString(R.string.auto_sign))
+            }
+        } catch (e: ApiException) {
+            Utils.showSnackBar(this, getString(R.string.auto_sign))
+        }
     }
 
     private fun addBackPressCallback() {
@@ -269,6 +327,15 @@ internal class MessagesActivity :
             updateAppOnDrawerClose = MessageState.ALL_MESSAGES
             startLoading()
             binding.appBarDrawer.toolbar.subtitle = ""
+        } else if (id == R.id.enable_switch) {
+            val changeSwitch: SwitchCompat = findViewById(R.id.change_switch)
+            launchCoroutine {
+                changeIsAutoSign(!changeSwitch.isChecked)
+                // 切换到主线程执行 UI 操作
+                withContext(Dispatchers.Main) {
+                    changeSwitch.isChecked = viewModel.settings.isAuto
+                }
+            }
         } else if (id == R.id.logout) {
             MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.logout)
@@ -509,8 +576,6 @@ internal class MessagesActivity :
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.messages_action, menu)
-        menu.findItem(R.id.action_delete_app).isVisible =
-            viewModel.appId != MessageState.ALL_MESSAGES
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -527,29 +592,7 @@ internal class MessagesActivity :
                 .setNegativeButton(R.string.no, null)
                 .show()
         }
-        if (item.itemId == R.id.action_delete_app) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.delete_app)
-                .setMessage(R.string.ack)
-                .setPositiveButton(R.string.yes) { _, _ -> deleteApp(viewModel.appId) }
-                .setNegativeButton(R.string.no, null)
-                .show()
-        }
         return super.onContextItemSelected(item)
-    }
-
-    private fun deleteApp(appId: Long) {
-        val settings = viewModel.settings
-        val client = ClientFactory.clientToken(settings.url, settings.sslSettings(), settings.token)
-        client.createService(ApplicationApi::class.java)
-            .deleteApp(appId)
-            .enqueue(
-                Callback.callInUI(
-                    this,
-                    onSuccess = { refreshAll() },
-                    onError = { Utils.showSnackBar(this, getString(R.string.error_delete_app)) }
-                )
-            )
     }
 
     private suspend fun loadMore(appId: Long) {

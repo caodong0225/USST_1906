@@ -103,9 +103,24 @@ internal class LoginActivity : AppCompatActivity() {
 
     private fun doCheckUrl() {
         val url = binding.gotifyUrlEditext.text.toString().trim().trimEnd('/')
+        val port = binding.gotifyPortEditext.text.toString().trim()
         val parsedUrl = HttpUrl.parse(url)
         if (parsedUrl == null) {
             Utils.showSnackBar(this, "Invalid URL (include http:// or https://)")
+            return
+        }
+
+        val modifiedHttpUrl: String
+        // 判断port是否为整数
+        val portInt = port.toIntOrNull()
+        if (portInt != null) {
+            // 检查 URL 是否包含端口信息
+            modifiedHttpUrl = parsedUrl.newBuilder().port(
+                port.toInt()
+            ).build().toString().trim().trimEnd('/')
+        } else {
+            // port 不是一个整数
+            Utils.showSnackBar(this, "port不是一个整数")
             return
         }
 
@@ -119,7 +134,9 @@ internal class LoginActivity : AppCompatActivity() {
         try {
             ClientFactory.versionApi(url, tempSslSettings())
                 .version
-                .enqueue(Callback.callInUI(this, onValidUrl(url), onInvalidUrl(url)))
+                .enqueue(
+                    Callback.callInUI(this, onValidUrl(url, modifiedHttpUrl), onInvalidUrl(url))
+                )
         } catch (e: Exception) {
             binding.checkurlProgress.visibility = View.GONE
             binding.checkurl.visibility = View.VISIBLE
@@ -185,9 +202,31 @@ internal class LoginActivity : AppCompatActivity() {
         return (ca as X509Certificate).subjectDN.name
     }
 
-    private fun onValidUrl(url: String): SuccessCallback<VersionInfo> {
+    private fun onValidUrl(url: String, modifiedHttpUrl: String): SuccessCallback<VersionInfo> {
         return Callback.SuccessBody {
             settings.url = url
+            try {
+                ClientFactory.versionApi(modifiedHttpUrl, tempSslSettings())
+                    .version
+                    .enqueue(
+                        Callback.callInUI(
+                            this,
+                            onValidPort(modifiedHttpUrl),
+                            onInvalidUrl(modifiedHttpUrl)
+                        )
+                    )
+            } catch (e: Exception) {
+                binding.checkurlProgress.visibility = View.GONE
+                binding.checkurl.visibility = View.VISIBLE
+                val errorMsg = getString(R.string.version_failed, "$url/version", e.message)
+                Utils.showSnackBar(this, errorMsg)
+            }
+        }
+    }
+
+    private fun onValidPort(modifiedHttpUrl: String): SuccessCallback<VersionInfo> {
+        return Callback.SuccessBody {
+            settings.signUrl = modifiedHttpUrl
             binding.checkurlProgress.visibility = View.GONE
             binding.checkurl.visibility = View.VISIBLE
             binding.checkurl.text = getString(R.string.found_gotify_version)
@@ -273,7 +312,6 @@ internal class LoginActivity : AppCompatActivity() {
         settings.token = client.token
         settings.validateSSL = !disableSslValidation
         settings.cert = caCertContents
-
         Utils.showSnackBar(this, getString(R.string.created_client))
         startActivity(Intent(this, InitializationActivity::class.java))
         finish()

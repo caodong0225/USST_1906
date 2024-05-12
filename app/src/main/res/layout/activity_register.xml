@@ -9,26 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/register_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/register_username" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/register_password"
         android:inputType="textPassword" />
 
-    <EditText
-        android:id="@+id/server_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/server_address" />
-
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/x_session_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

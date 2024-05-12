@@ -1,7 +1,7 @@
 package com.github.gotify.client.api;
 
 import com.github.gotify.client.model.Register;
-import com.github.gotify.client.model.RegisterResponse;
+import com.github.gotify.client.model.GlobalResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Headers;
@@ -12,7 +12,7 @@ public interface RegisterApi {
             "Content-Type:application/x-www-form-urlencoded"
     })
     @POST("register")
-    Call<RegisterResponse> createRegister(
+    Call<GlobalResponse> createRegister(
             @retrofit2.http.Body Register body
     );
 }

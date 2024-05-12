@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "The RegisterInfo holds information about the response of the server.")
-public class RegisterResponse {
+public class GlobalResponse {
     @SerializedName("code")
     private String code = null;
 
@@ -21,7 +21,7 @@ public class RegisterResponse {
     public void setCode(String code) {
         this.code = code;
     }
-    @ApiModelProperty(example = "注册成功", required = true, value = "The response message.")
+    @ApiModelProperty(example = "成功", required = true, value = "The response message.")
     public String getMessage() {
         return message;
     }

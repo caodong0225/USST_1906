@@ -10,10 +10,9 @@ import com.github.gotify.Utils
 import com.github.gotify.api.ApiException
 import com.github.gotify.api.Callback
 import com.github.gotify.api.ClientFactory
+import com.github.gotify.client.model.GlobalResponse
 import com.github.gotify.client.model.Register
-import com.github.gotify.client.model.RegisterResponse
 import com.github.gotify.databinding.ActivityRegisterBinding
-import okhttp3.HttpUrl
 import org.tinylog.kotlin.Logger
 
 internal class RegisterActivity : AppCompatActivity() {
@@ -53,11 +52,12 @@ internal class RegisterActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    private fun onCreateUser(registerInfo: RegisterResponse) {
+    private fun onCreateUser(registerInfo: GlobalResponse, modifiedHttpUrl: String) {
         if (registerInfo.code != "200") {
             Utils.showSnackBar(this, registerInfo.message)
         } else {
             Utils.showSnackBar(this, registerInfo.message)
+            settings.signUrl = modifiedHttpUrl
             // 创建一个 Handler，并在一段时间后执行 finish() 方法
             Handler(Looper.getMainLooper()).postDelayed({
                 finish()
@@ -66,44 +66,22 @@ internal class RegisterActivity : AppCompatActivity() {
     }
 
     private fun doRegisterAccount(callback: (Boolean) -> Unit) {
-        // 注册账号
-        val url = settings.url
-        val port = binding.serverAddress.text.toString()
-        val modifiedHttpUrl: String
-        // 判断port是否为整数
-        val portInt = port.toIntOrNull()
-        if (portInt != null) {
-            // port 是一个整数
-            val httpUrl = HttpUrl.parse(url)
-            if (httpUrl != null) {
-                // 检查 URL 是否包含端口信息
-                modifiedHttpUrl = httpUrl.newBuilder().port(port.toInt()).build().toString()
-            } else {
-                // URL 不是一个有效的 HTTP URL
-                Utils.showSnackBar(this, "服务器地址不是一个有效的URL")
-                return
-            }
-        } else {
-            // port 不是一个整数
-            Utils.showSnackBar(this, "port不是一个整数")
-            return
-        }
-
         val username = binding.registerUsername.text.toString()
         val password = binding.registerPassword.text.toString()
         val xSessionId = binding.xSessionId.text.toString()
         val registerForm = Register(username, password, xSessionId)
 
+        val modifiedHttpUrl = settings.signUrl
         try {
             ClientFactory.registerUser(
-                modifiedHttpUrl,
+                settings.signUrl,
                 settings.sslSettings()
             ).createRegister(registerForm)
                 .enqueue(
                     Callback.callInUI(
                         this,
                         onSuccess = Callback.SuccessBody { registerInfo ->
-                            onCreateUser(registerInfo)
+                            onCreateUser(registerInfo, modifiedHttpUrl)
                             // 注册成功，调用回调函数并传递 true
                             callback(true)
                         },
