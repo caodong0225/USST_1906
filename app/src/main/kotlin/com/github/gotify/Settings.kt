@@ -6,7 +6,7 @@ import com.github.gotify.client.model.User
 
 internal class Settings(context: Context) {
     private val sharedPreferences: SharedPreferences
-    private val defaultUrl = "http://192.168.31.198" // 换成本地运行的主机的IP地址
+    private val defaultUrl = "http://f.xianwill.cn:16013" // 换成本地运行的主机的IP地址
     var url: String
         get() = defaultUrl // sharedPreferences.getString("url", defaultUrl)!!//固定服务器链接
         set(value) = sharedPreferences.edit().putString("url", value).apply()
