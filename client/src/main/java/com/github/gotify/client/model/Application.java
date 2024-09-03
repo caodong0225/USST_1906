@@ -46,6 +46,38 @@ public class Application {
   @SerializedName("token")
   private String token = null;
 
+  @SerializedName("isAuto")
+  private Boolean isAuto = null;
+
+  @SerializedName("interval")
+  private Long interval = null;
+
+  @SerializedName("enabled")
+  private Boolean enabled = null;
+
+  @SerializedName("waitTime")
+  private Long waitTime = null;
+
+  public Application waitTime(Long waitTime) {
+      this.waitTime = waitTime;
+      return this;
+  }
+
+  public Application enabled(Boolean enabled) {
+    this.enabled = enabled;
+    return this;
+  }
+
+  public Application interval(Long interval) {
+    this.interval = interval;
+    return this;
+  }
+
+  public Application isAuto(Boolean isAuto) {
+      this.isAuto = isAuto;
+      return this;
+  }
+
   public Application description(String description) {
     this.description = description;
     return this;
@@ -89,6 +121,26 @@ public class Application {
   @ApiModelProperty(example = "false", required = true, value = "Whether the application is an internal application. Internal applications should not be deleted.")
   public Boolean isInternal() {
     return internal;
+  }
+
+  public Boolean getIsAuto() {
+      return isAuto;
+  }
+  public Application setIsAuto(Boolean isAuto) {
+      this.isAuto = isAuto;
+      return this;
+  }
+
+  public Long getInterval() {
+      return interval;
+  }
+
+  public Boolean getEnabled() {
+      return enabled;
+  }
+
+  public Long getWaitTime() {
+      return waitTime;
   }
 
   public Application name(String name) {

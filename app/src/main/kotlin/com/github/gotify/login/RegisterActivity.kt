@@ -10,8 +10,8 @@ import com.github.gotify.Utils
 import com.github.gotify.api.ApiException
 import com.github.gotify.api.Callback
 import com.github.gotify.api.ClientFactory
-import com.github.gotify.client.model.GlobalResponse
-import com.github.gotify.client.model.Register
+import com.github.gotify.client.model.Error
+import com.github.gotify.client.model.User
 import com.github.gotify.databinding.ActivityRegisterBinding
 import org.tinylog.kotlin.Logger
 
@@ -52,31 +52,26 @@ internal class RegisterActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    private fun onCreateUser(registerInfo: GlobalResponse, modifiedHttpUrl: String) {
-        if (registerInfo.code != "200") {
-            Utils.showSnackBar(this, registerInfo.message)
-        } else {
-            Utils.showSnackBar(this, registerInfo.message)
-            settings.signUrl = modifiedHttpUrl
-            // 创建一个 Handler，并在一段时间后执行 finish() 方法
-            Handler(Looper.getMainLooper()).postDelayed({
-                finish()
-            }, 1000) // 延迟 1 秒执行
-        }
+    private fun onCreateUser(registerInfo: User, modifiedHttpUrl: String) {
+        Utils.showSnackBar(this, "注册成功")
+        settings.signUrl = modifiedHttpUrl
+        // 创建一个 Handler，并在一段时间后执行 finish() 方法
+        Handler(Looper.getMainLooper()).postDelayed({
+            finish()
+        }, 1000) // 延迟 1 秒执行
     }
 
     private fun doRegisterAccount(callback: (Boolean) -> Unit) {
         val username = binding.registerUsername.text.toString()
         val password = binding.registerPassword.text.toString()
         val xSessionId = binding.xSessionId.text.toString()
-        val registerForm = Register(username, password, xSessionId)
 
         val modifiedHttpUrl = settings.signUrl
         try {
             ClientFactory.registerUser(
                 settings.signUrl,
                 settings.sslSettings()
-            ).createRegister(registerForm)
+            ).createRegister(username, password, xSessionId)
                 .enqueue(
                     Callback.callInUI(
                         this,
@@ -86,8 +81,20 @@ internal class RegisterActivity : AppCompatActivity() {
                             callback(true)
                         },
                         onError = { exception ->
-                            Logger.error(exception, "注册失败")
-                            Utils.showSnackBar(this, "注册失败")
+                            when (exception.code) {
+                                429 -> {
+                                    Utils.showSnackBar(this, "x-session-id不合法")
+                                }
+                                430 -> {
+                                    Utils.showSnackBar(this, "您已经注册过了")
+                                }
+                                431 -> {
+                                    Utils.showSnackBar(this, "用户名已存在")
+                                }
+                                else -> {
+                                    Utils.showSnackBar(this, "注册失败")
+                                }
+                            }
                             // 注册失败，调用回调函数并传递 false
                             callback(false)
                         }

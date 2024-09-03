@@ -1,26 +1,25 @@
 package com.github.gotify.client.api;
 
-import com.github.gotify.client.model.GlobalResponse;
+
+import com.github.gotify.client.model.Application;
 
 import retrofit2.Call;
-import retrofit2.http.GET;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
+import retrofit2.http.PUT;
 
+/**
+ * @author jyzxc
+ */
 public interface AutoSignApi {
+    @FormUrlEncoded
     @Headers({
-            "Content-Type:application/json"
+            "Content-Type:application/x-www-form-urlencoded"
     })
-    @GET("is_auto")
-    Call<GlobalResponse> isAutoSign(
-            @retrofit2.http.Query("token") String token
+    @PUT("application/auto/{id}")
+    Call<Application> setAutoSign(
+            @Field("isAuto") Boolean isAuto, @retrofit2.http.Path("id") Long id
     );
 
-    @Headers({
-            "Content-Type:application/json"
-    })
-    @GET("set_auto")
-    Call<GlobalResponse> setAutoSign(
-            @retrofit2.http.Query("token") String token,
-            @retrofit2.http.Query("is_auto") int auto
-    );
 }

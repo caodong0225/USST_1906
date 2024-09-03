@@ -70,6 +70,74 @@
             android:contentDescription="@string/gotify_logo" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gotify_logo_image"
+            app:layout_constraintWidth_max="280dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username_editext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"
+                android:hint="@string/username"
+                android:importantForAutofill="yes"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:visibility="visible" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintWidth_max="280dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_editext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="password"
+                android:hint="@string/password"
+                android:importantForAutofill="yes"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="@string/login"
+            android:textColor="@android:color/white"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintWidth_max="280dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/gotify_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -77,6 +145,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gotify_logo_image"
@@ -121,74 +190,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkurl"
-            app:layout_constraintWidth_max="280dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username_editext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="username"
-                android:hint="@string/username"
-                android:importantForAutofill="yes"
-                android:inputType="textPersonName"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username"
-            app:layout_constraintWidth_max="280dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password_editext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                android:importantForAutofill="yes"
-                android:autofillHints="password"
-                android:hint="@string/password" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:text="@string/login"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"
-            app:layout_constraintWidth_max="280dp" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/checkurl"
             android:layout_width="0dp"
@@ -198,7 +199,7 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/check_url"
             android:textColor="@android:color/white"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/advanced_settings"
             app:layout_constraintStart_toStartOf="@+id/gotify_url"
             app:layout_constraintTop_toBottomOf="@+id/gotify_url"
@@ -211,7 +212,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/register_page"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -220,13 +221,13 @@
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="@string/check_url"
-            android:visibility="visible"
             android:background="@null"
+            android:contentDescription="@string/setting_description"
+            android:text="@string/check_url"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/gotify_url"
             app:layout_constraintTop_toTopOf="@+id/checkurl"
-            app:srcCompat="@drawable/ic_settings"
-            android:contentDescription="@string/setting_description" />
+            app:srcCompat="@drawable/ic_settings" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

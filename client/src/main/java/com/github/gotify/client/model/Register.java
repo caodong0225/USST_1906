@@ -8,29 +8,29 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "The RegisterExternal holds information about a new user.")
 public class Register {
-    @SerializedName("username")
-    private String username;
+    @SerializedName("name")
+    private String name;
 
-    @SerializedName("password")
-    private String password;
+    @SerializedName("pass")
+    private String pass;
 
     @SerializedName("x_session_id")
     private String x_session_id;
 
     @ApiModelProperty(example = "lisa", required = true, value = "The user's name.")
     public String getUsername() {
-        return username;
+        return name;
     }
     public void setUsername(String username) {
-        this.username = username;
+        this.name = username;
     }
     @ApiModelProperty(example = "123456", required = true, value = "The user's password.")
     public String getPassword() {
-        return password;
+        return pass;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.pass = password;
     }
     @ApiModelProperty(example = "5", required = true, value = "The user's x_session_id.")
     public String getX_session_id() {
@@ -42,9 +42,4 @@ public class Register {
     }
 
     // 构造函数
-    public Register(String username, String password, String xSessionId) {
-        this.username = username;
-        this.password = password;
-        this.x_session_id = xSessionId;
-    }
 }

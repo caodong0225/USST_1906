@@ -43,7 +43,6 @@ import com.github.gotify.client.api.ClientApi
 import com.github.gotify.client.api.MessageApi
 import com.github.gotify.client.model.Application
 import com.github.gotify.client.model.Client
-import com.github.gotify.client.model.GlobalResponse
 import com.github.gotify.client.model.Message
 import com.github.gotify.databinding.ActivityMessagesBinding
 import com.github.gotify.init.InitializationActivity
@@ -91,7 +90,6 @@ internal class MessagesActivity :
         binding = ActivityMessagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, MessagesModelFactory(this))[MessagesModel::class.java]
-        Logger.info("Entering " + javaClass.simpleName)
         initDrawer()
 
         val layoutManager = LinearLayoutManager(this)
@@ -197,20 +195,34 @@ internal class MessagesActivity :
         viewModel.targetReferences.clear()
         updateMessagesAndStopLoading(viewModel.messages[viewModel.appId])
         var selectedItem = menu.findItem(R.id.nav_all_messages)
+        val changeSwitch = binding.navView.menu.findItem(R.id.enable_switch).actionView
+            ?.findViewById<SwitchCompat>(R.id.change_switch)
+        binding.navView.menu.findItem(R.id.enable_switch).setVisible(false)
+        if (changeSwitch != null) {
+            changeSwitch.visibility = View.GONE
+        }
         applications.indices.forEach { index ->
+            if (changeSwitch != null) {
+                changeSwitch.visibility = View.VISIBLE
+            }
+            binding.navView.menu.findItem(R.id.enable_switch).setVisible(true)
             val app = applications[index]
-            val item = menu.add(R.id.apps, index, APPLICATION_ORDER, app.name)
+            val item = menu.add(R.id.apps, index, APPLICATION_ORDER, if (app.enabled) app.name else "session失效！")
             item.isCheckable = true
             if (app.id == viewModel.appId) selectedItem = item
             val t = Utils.toDrawable(resources) { icon -> item.icon = icon }
             viewModel.targetReferences.add(t)
             viewModel.picassoHandler
                 .get()
-                .load(Utils.resolveAbsoluteUrl(viewModel.settings.url + "/", app.image))
+                .load(Utils.resolveAbsoluteUrl(viewModel.settings.url + "/", if (app.enabled) app.image else "static/unknown.png"))
                 .error(R.drawable.ic_alarm)
                 .placeholder(R.drawable.ic_placeholder)
                 .resize(100, 100)
                 .into(t)
+            viewModel.settings.isAuto = app.isAuto
+            if (changeSwitch != null) {
+                changeSwitch.isChecked = app.isAuto
+            }
         }
         selectAppInMenu(selectedItem)
     }
@@ -250,7 +262,7 @@ internal class MessagesActivity :
             ?.findViewById<SwitchCompat>(R.id.change_switch)
 
         launchCoroutine {
-            checkIsAutoSign()
+            //checkIsAutoSign()
             // 切换到主线程执行 UI 操作
             withContext(Dispatchers.Main) {
                 if (changeSwitch != null) {
@@ -260,7 +272,26 @@ internal class MessagesActivity :
         }
     }
 
-    private fun checkIsAutoSign() {
+//    private fun checkIsAutoSign() {
+//        val autoSignApi = ClientFactory.clientToken(
+//            viewModel.settings.signUrl,
+//            viewModel.settings.sslSettings(),
+//            viewModel.settings.token
+//        )
+//            .createService(AutoSignApi::class.java)
+//        try {
+//            val res: GlobalResponse = Api.execute(autoSignApi.isAutoSign(viewModel.settings.token))
+//            if (res.code == "200") {
+//                Logger.info("Auto sign info: ${res.message}")
+//                viewModel.settings.isAuto = res.message == "1"
+//            } else {
+//                Logger.error("Could not get auto sign info")
+//            }
+//        } catch (e: ApiException) {
+//            Logger.error(e, "Could not get auto sign info")
+//        }
+//    }
+    private fun changeIsAutoSign(application : Application) {
         val autoSignApi = ClientFactory.clientToken(
             viewModel.settings.signUrl,
             viewModel.settings.sslSettings(),
@@ -268,39 +299,17 @@ internal class MessagesActivity :
         )
             .createService(AutoSignApi::class.java)
         try {
-            val res: GlobalResponse = Api.execute(autoSignApi.isAutoSign(viewModel.settings.token))
-            if (res.code == "200") {
-                viewModel.settings.isAuto = res.message == "1"
+            val res: Application = Api.execute(autoSignApi.setAutoSign(application.isAuto, application.id))
+            if (res.id == application.id) {
+                viewModel.settings.isAuto = res.isAuto
+                Logger.info("修改成功"+res.isAuto)
+                Utils.showSnackBar(this, "修改成功")
             } else {
-                Logger.error("Could not get auto sign info")
+                Utils.showSnackBar(this, "修改失败")
             }
+
         } catch (e: ApiException) {
-            Logger.error(e, "Could not get auto sign info")
-        }
-    }
-    private fun changeIsAutoSign(isAutoSign: Boolean) {
-        val autoSignApi = ClientFactory.clientToken(
-            viewModel.settings.signUrl,
-            viewModel.settings.sslSettings(),
-            viewModel.settings.token
-        )
-            .createService(AutoSignApi::class.java)
-        val autoSign = if (isAutoSign) {
-            1
-        } else {
-            0
-        }
-        try {
-            val res: GlobalResponse = Api.execute(
-                autoSignApi.setAutoSign(viewModel.settings.token, autoSign)
-            )
-            if (res.code == "200") {
-                viewModel.settings.isAuto = isAutoSign
-            } else {
-                Utils.showSnackBar(this, getString(R.string.auto_sign))
-            }
-        } catch (e: ApiException) {
-            Utils.showSnackBar(this, getString(R.string.auto_sign))
+            Utils.showSnackBar(this, "修改失败")
         }
     }
 
@@ -329,8 +338,9 @@ internal class MessagesActivity :
             binding.appBarDrawer.toolbar.subtitle = ""
         } else if (id == R.id.enable_switch) {
             val changeSwitch: SwitchCompat = findViewById(R.id.change_switch)
+            val app = viewModel.appsHolder.get()[0]
             launchCoroutine {
-                changeIsAutoSign(!changeSwitch.isChecked)
+                changeIsAutoSign(app.setIsAuto(!changeSwitch.isChecked))
                 // 切换到主线程执行 UI 操作
                 withContext(Dispatchers.Main) {
                     changeSwitch.isChecked = viewModel.settings.isAuto

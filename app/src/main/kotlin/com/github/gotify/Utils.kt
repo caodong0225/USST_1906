@@ -35,7 +35,7 @@ import org.tinylog.kotlin.Logger
 internal object Utils {
     val JSON: Gson = JSON().gson
 
-    fun showSnackBar(activity: Activity, message: String?) {
+    fun showSnackBar(activity: Activity, message: String) {
         val rootView = activity.window.decorView.findViewById<View>(android.R.id.content)
         Snackbar.make(rootView, message!!, Snackbar.LENGTH_SHORT).show()
     }
